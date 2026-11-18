@@ -1,0 +1,90 @@
+# ---------------------------------------------------------------------------
+# US Residential Flood Risk (climate-adjusted) — global configuration
+# All relative paths are resolved against the project root.
+# ---------------------------------------------------------------------------
+project:
+  name: "US Residential Flood Risk — Climate-Adjusted"
+  short_name: "flood-risk-us"
+  version: "1.1.0"
+
+paths:
+  data: data
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  outputs: data/outputs
+  logs: logs
+
+crs:
+  geographic: "EPSG:4326"
+  equal_area: "EPSG:5070"        # NAD83 / CONUS Albers — all CONUS raster processing
+
+# ---------------------------------------------------------------------------
+# Hazard
+# ---------------------------------------------------------------------------
+hazard:
+  return_periods: [2, 5, 10, 25, 50, 100, 250, 500, 1000]
+  grid_resolution_m: 30           # hydraulic grid (3DEP 1 arc-second, reprojected)
+  fluvial_min_drainage_km2: 50    # smaller streams are represented by the pluvial (rain-on-grid) model
+  water_years: [1980, 2022]       # complete water years in NWM v3.0 retrospective (Feb-1979 .. Jan-2023)
+
+# Scenario-year combinations delivered in the product
+scenarios:
+  baseline:      {label: "Present climate (2020)", ssp: null,     year: 2020}
+  ssp245_2030:   {label: "SSP2-4.5 · 2030",        ssp: "ssp245", year: 2030}
+  ssp245_2060:   {label: "SSP2-4.5 · 2060",        ssp: "ssp245", year: 2060}
+  ssp585_2030:   {label: "SSP5-8.5 · 2030",        ssp: "ssp585", year: 2030}
+  ssp585_2060:   {label: "SSP5-8.5 · 2060",        ssp: "ssp585", year: 2060}
+
+climate:
+  reference_period: [1995, 2014]  # CMIP6 / AR6 reference period
+  # CMIP6 20-year climatology windows (World Bank CCKP cmip6-x0.25) used for each horizon
+  cckp_windows:
+    2030: ["2020-2039"]
+    2060: ["2040-2059", "2060-2079"]   # averaged -> centred on 2060
+  ensemble_stat: "median"
+  slr_dataset: "IPCC AR6 regional sea-level projections, medium confidence, total RSL incl. VLM"
+  slr_quantile: 50
+  slr_baseline_year: 2020
+
+# ---------------------------------------------------------------------------
+# Exposure
+# ---------------------------------------------------------------------------
+exposure:
+  nsi_api: "https://nsi.sec.usace.army.mil/nsiapi/structures"
+  nsi_version: "NSI 2026 Base"
+  price_level: "USD, August-2025 price level (NSI)"
+  residential_occupancy_prefixes: ["RES1", "RES2", "RES3"]   # single-family, manufactured, multi-family
+  value_basis: "fullrep"          # full (undepreciated) replacement cost; depreciated value reported as alternative
+
+# ---------------------------------------------------------------------------
+# Vulnerability & risk metrics
+# ---------------------------------------------------------------------------
+vulnerability:
+  include_contents: true
+  ddf_riverine: "USACE default occupancy types (go-consequences occtypes.json)"
+  ddf_coastal: "Hazus 4.0 Coastal A / Coastal V (FEMA FAST lookup tables)"
+  vulnerability_factor: 0.917       # global multiplier on damage ratios (NFIP-calibrated, scripts/14_calibrate_nfip.py)
+  below_ffe_min_depth_m: 0.0     # water below the first floor (basement / crawlspace) damages only when the
+                                  # ground-level depth reaches this value (NFIP-calibrated, see calibration)
+  postfirm_elevation: true       # post-FIRM homes in the SFHA: no basement, first floor at BFE + elevation class
+                                  # (NFIP floodplain rules; shares and elevations from NFIP policies, scripts/04b)
+
+risk:
+  aal_integration: "trapezoidal in annual exceedance probability"
+  frequent_event_floor_rp: 2      # no damage assumed for events more frequent than this
+  tail: "hold-constant"           # loss beyond the 1000-yr is held at the 1000-yr loss
+  peril_combination: "max-depth"  # combined hazard = max depth across perils at each return period
+  protection:                     # flood defences (fluvial + coastal; pluvial is interior drainage)
+    fema_levee_rp: 100            # FIRM X "reduced flood risk due to levee" and A99 zones
+    nld_accredited_rp: 100        # USACE NLD leveed areas, FEMA-accredited / provisionally accredited
+    nld_other_rp: 25              # NLD leveed areas of non-accredited / unrated systems (no overtopping AEP)
+    coastal_implicit_rp: 100      # homes today's 2-yr storm tide would flood >= 0.5 m deep must sit behind
+    coastal_implicit_min_depth_m: 0.5   # dikes / pumps (safety net where NLD / FEMA do not show the defence)
+    adapt_with_climate: false     # false: defence crest fixed at today's design level (no adaptation)
+    adapt_variant: true           # also deliver the raised-crest variant (standard kept in every scenario)
+  calibration:                    # global parameters calibrated against NFIP claims (scripts/14_calibrate_nfip.py)
+    fluvial_tc_natural: 10         # channel capacity return period, natural channels (yr)
+    fluvial_tc_urban: 100          # channel capacity return period, >= 60 % developed catchments (yr)
+    pluvial_drain_rp: 25           # effective storm-drain standard (yr); GPU runs drain 5-yr, more via rainfall shift
+    regional_factors: true         # state calibration factors (config/regional_factors.csv, scripts/14 --regional)

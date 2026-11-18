@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Data · Flood Risk Atlas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23256abf'/%3E%3Cpath d='M5 19c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M5 24c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3' fill='none' stroke='white' stroke-opacity='.55' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="css/app.css" rel="stylesheet" />
+  <link href="css/doc.css" rel="stylesheet" />
+</head>
+<body class="docpage">
+  <header class="topbar">
+    <a class="brand" href="./">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" /><path d="M5 18.5c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3" /><path class="w2" d="M5 23.5c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3" /></svg>
+      <span class="brand-text"><span class="brand-name">Flood Risk Atlas</span><span class="brand-sub">US residential · climate-adjusted</span></span>
+    </a>
+    <nav class="tabs" aria-label="Sections">
+      <a class="tab" href="./">Atlas</a>
+      <a class="tab" href="methodology.html">Methodology</a>
+      <a class="tab is-active" href="data.html">Data</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle dark mode">
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6z"/></svg>
+      </button>
+    </div>
+  </header>
+  <div class="doc-wrap single">
+    <article class="doc">
+      <h1>Data access</h1>
+      <p class="lede">ZIP-level flood damage estimates for US residential buildings: fluvial, pluvial and coastal flooding, present climate and SSP2-4.5 / SSP5-8.5 at 2030 and 2060.</p>
+      <div class="dl-grid" id="dlGrid"></div>
+      <h2>Release</h2>
+      <table class="kv" id="release"></table>
+      <h2>Data dictionary</h2>
+      <p>One row per ZIP code × scenario-year × flood type. Ratios are value-weighted (sum of losses ÷ sum of full replacement value of structures and contents).</p>
+      <div id="dict"></div>
+      <h2>Suggested citation</h2>
+      <p class="cite" id="cite"></p>
+      <h2>Sources &amp; licences</h2>
+      <p>Built entirely from public data: USACE National Structure Inventory 2026; NOAA National Water Model v3.0 retrospective; NOAA Atlas 14 and NOAA Atlas 2 (western WA/OR); USACE National Levee Database; FEMA NFIP claims and penetration rates (OpenFEMA, calibration); USGS 3DEP, WBD and Annual NLCD; EPA/USGS NHDPlus V2.1; USDA gNATSGO; COAST-RP (CC-BY 4.0); IPCC AR6 sea-level projections; CMIP6 via the World Bank Climate Change Knowledge Portal; FEMA/USACE depth-damage functions; US Census ZCTA 2020. Basemap © CARTO, © OpenStreetMap contributors.</p>
+    </article>
+  </div>
+  <script src="js/doc.js"></script>
+  <script>buildDataPage();</script>
+</body>
+</html>

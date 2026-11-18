@@ -1,0 +1,6 @@
+* text=auto
+# shell scripts must keep LF line endings, also in Windows checkouts (Git Bash)
+*.sh text eol=lf
+*.bin binary
+*.pmtiles binary
+*.parquet binary

@@ -1,0 +1,22 @@
+# data & outputs are large and reproducible from the pipeline
+data/
+logs/
+*.part
+*.tmp
+
+# python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+
+# platform build artefacts
+platform/node_modules/
+platform/dist/
+platform/public/data/
+
+# editors / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

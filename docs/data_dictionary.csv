@@ -1,0 +1,28 @@
+field,description,unit
+zip5,"5-digit ZIP code (2020 Census ZIP Code Tabulation Area)",
+defence_scenario,"Flood-defence assumption for future scenarios: fixed-crest (defences keep today's crest height; default) or raised-crest (defences are raised with the hazard and keep their design standard). Present-climate rows are identical in both",
+scenario_id,"Scenario-year identifier: baseline, ssp245_2030, ssp245_2060, ssp585_2030, ssp585_2060",
+ssp,"Emission scenario: present, ssp245, ssp585",
+hazard_year,"Year for which damage is computed (2020 present climate, 2030, 2060)",year
+peril,"Flood type: fluvial, pluvial, coastal, combined (max depth across flood types)",
+state_fips,"State FIPS code of the majority of the ZIP's residential buildings",
+n_res_buildings,"Residential structures (Hazus RES1, RES2, RES3A-F) in the ZIP",count
+n_housing_units,"Housing units in those structures",count
+value_struct_usd,"Full replacement cost of residential structures",USD (Aug-2025)
+value_cont_usd,"Full replacement cost of contents",USD (Aug-2025)
+value_total_usd,"Structures + contents full replacement cost",USD (Aug-2025)
+value_struct_depr_usd,"Depreciated structure value (NSI)",USD (Aug-2025)
+pop_night,"Night-time population in residential structures (NSI)",persons
+n_bldg_defended,"Residential buildings behind a flood defence for river or coastal flooding (FEMA levee zone, USACE NLD leveed area, or implicit coastal defence)",count
+n_bldg_postfirm,"Expected number of residential buildings in the SFHA built after the community's first flood map (post-FIRM) and therefore elevated to the base flood elevation (sum of building probabilities, NFIP policies 2019)",count
+aal_usd,"Average annual loss: expected loss per year (structure + contents)",USD per year
+aal_ratio,"AAL divided by value_total_usd",fraction per year
+l100_usd,"Conditional loss when each building experiences its 1-in-100-year flood (sum over the ZIP)",USD
+l100_ratio,"l100_usd divided by value_total_usd",fraction
+l1000_usd,"Conditional loss when each building experiences its 1-in-1,000-year flood (sum over the ZIP)",USD
+l1000_ratio,"l1000_usd divided by value_total_usd",fraction
+n_bldg_flooded_100yr,"Residential buildings with flood depth > 0 in the 1-in-100-year event",count
+pct_bldg_flooded_100yr,"n_bldg_flooded_100yr divided by n_res_buildings",fraction
+exposure_vintage,"Exposure dataset version",
+price_level,"Price level of monetary values",
+model_version,"Model / product version",

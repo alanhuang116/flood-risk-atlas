@@ -1,0 +1,50 @@
+state_fips,abbr,region,c_inland,c_coastal
+01,AL,Southeast,1.674,1.674
+04,AZ,Southwest,0.3876,0.3876
+05,AR,South,0.8986,0.8986
+06,CA,West,0.2625,0.2625
+08,CO,Southwest,0.5029,0.5029
+09,CT,Northeast,0.8101,0.8101
+10,DE,Northeast,0.4384,0.4384
+11,DC,Northeast,0.8101,0.8101
+12,FL,Southeast,1.0405,1.0405
+13,GA,Southeast,0.3686,0.3686
+16,ID,Northwest,0.7019,0.7019
+17,IL,Ohio Valley,1.0694,1.0694
+18,IN,Ohio Valley,0.889,0.889
+19,IA,Upper Midwest,1.2275,1.2275
+20,KS,South,0.575,0.575
+21,KY,Ohio Valley,0.4495,0.4495
+22,LA,South,1.2291,1.2291
+23,ME,Northeast,1.4271,1.4271
+24,MD,Northeast,0.7119,0.7119
+25,MA,Northeast,0.8715,0.8715
+26,MI,Upper Midwest,1.1111,1.1111
+27,MN,Upper Midwest,1.7694,1.7694
+28,MS,South,2.3946,2.3946
+29,MO,Ohio Valley,1.757,1.757
+30,MT,Northern Rockies and Plains,0.9582,0.9582
+31,NE,Northern Rockies and Plains,0.6076,0.6076
+32,NV,West,0.749,0.749
+33,NH,Northeast,0.4928,0.4928
+34,NJ,Northeast,1.0886,1.0886
+35,NM,Southwest,0.7478,0.7478
+36,NY,Northeast,1.1695,1.1695
+37,NC,Southeast,1.421,1.421
+38,ND,Northern Rockies and Plains,1.4011,1.4011
+39,OH,Ohio Valley,0.6473,0.6473
+40,OK,South,2.1745,2.1745
+41,OR,Northwest,0.25,0.25
+42,PA,Northeast,0.521,0.521
+44,RI,Northeast,0.9077,0.9077
+45,SC,Southeast,0.8017,0.8017
+46,SD,Northern Rockies and Plains,0.7589,0.7589
+47,TN,Ohio Valley,0.6026,0.6026
+48,TX,South,1.617,1.617
+49,UT,Southwest,0.7478,0.7478
+50,VT,Northeast,0.4685,0.4685
+51,VA,Southeast,1.1233,1.1233
+53,WA,Northwest,0.5759,0.5759
+54,WV,Ohio Valley,0.4513,0.4513
+55,WI,Upper Midwest,0.4175,0.4175
+56,WY,Northern Rockies and Plains,0.9582,0.9582

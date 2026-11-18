@@ -1,0 +1,43 @@
+name: floodrisk
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.11
+  # geospatial core
+  - gdal>=3.9
+  - libgdal-netcdf
+  - rasterio
+  - geopandas
+  - pyogrio
+  - shapely>=2
+  - pyproj
+  - rioxarray
+  # data / compute
+  - numpy<2.2
+  - pandas
+  - pyarrow
+  - python-duckdb
+  - numba
+  - scipy
+  - xarray
+  - netcdf4
+  - h5netcdf
+  - zarr
+  - dask
+  - fsspec
+  - s3fs
+  - requests
+  - tqdm
+  - pyyaml
+  - py7zr
+  # hydrology
+  - whitebox
+  # GPU (pluvial 2D solver)
+  - cupy
+  - cuda-version=12.1
+  # viz / qa
+  - matplotlib
+  - scikit-learn
+  - jupyterlab
+  - pip

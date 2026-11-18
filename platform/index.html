@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flood Risk Atlas</title>
+  <meta name="description" content="Climate-adjusted flood damage to US residential buildings — fluvial, pluvial and coastal — by 5-digit ZIP code under SSP2-4.5 and SSP5-8.5 for 2030 and 2060." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23256abf'/%3E%3Cpath d='M5 19c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M5 24c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3' fill='none' stroke='white' stroke-opacity='.55' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <link href="css/app.css" rel="stylesheet" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Flood Risk Atlas home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="9" />
+        <path d="M5 18.5c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3" />
+        <path class="w2" d="M5 23.5c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3" />
+      </svg>
+      <span class="brand-text">
+        <span class="brand-name">Flood Risk Atlas</span>
+        <span class="brand-sub">US residential · climate-adjusted</span>
+      </span>
+    </a>
+    <nav class="tabs" aria-label="Sections">
+      <a class="tab is-active" href="./">Atlas</a>
+      <a class="tab" href="methodology.html">Methodology</a>
+      <a class="tab" href="data.html">Data</a>
+    </nav>
+    <div class="search top-search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+      <input id="zipSearch" inputmode="numeric" maxlength="5" placeholder="Find a ZIP code" autocomplete="off" aria-label="Search 5-digit ZIP code" />
+      <span class="search-hint" id="searchHint"></span>
+    </div>
+    <div class="top-actions">
+      <span class="version-chip" id="versionChip">v0.1</span>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="filters" role="toolbar" aria-label="Data selection">
+    <div class="fgroup">
+      <span class="flabel" id="lblScenario">Scenario</span>
+      <div class="seg" role="radiogroup" aria-labelledby="lblScenario" data-key="ssp">
+        <button role="radio" data-v="present">Present</button>
+        <button role="radio" data-v="ssp245">SSP2-4.5</button>
+        <button role="radio" data-v="ssp585">SSP5-8.5</button>
+      </div>
+    </div>
+    <div class="fgroup">
+      <span class="flabel" id="lblYear">Horizon</span>
+      <div class="seg" role="radiogroup" aria-labelledby="lblYear" data-key="year">
+        <button role="radio" data-v="2030">2030</button>
+        <button role="radio" data-v="2060">2060</button>
+      </div>
+    </div>
+    <div class="fgroup" id="grpDefence">
+      <span class="flabel" id="lblDefence" title="Flood defences (levees, dikes, flood walls) in future scenarios">Defences</span>
+      <div class="seg" role="radiogroup" aria-labelledby="lblDefence" data-key="def">
+        <button role="radio" data-v="fixed" title="Defences keep today's crest height; their protection standard falls as the hazard grows">Fixed</button>
+        <button role="radio" data-v="adapt" title="Defences are raised with the hazard and keep today's design standard">Raised</button>
+      </div>
+    </div>
+    <div class="fgroup">
+      <span class="flabel" id="lblPeril">Flood type</span>
+      <div class="seg" role="radiogroup" aria-labelledby="lblPeril" data-key="peril">
+        <button role="radio" data-v="combined">All</button>
+        <button role="radio" data-v="fluvial"><i class="key k-fluvial"></i>River</button>
+        <button role="radio" data-v="pluvial"><i class="key k-pluvial"></i>Rainfall</button>
+        <button role="radio" data-v="coastal"><i class="key k-coastal"></i>Coastal</button>
+      </div>
+    </div>
+    <div class="fgroup">
+      <label class="flabel" for="metricSel">Metric</label>
+      <div class="select-wrap">
+        <select id="metricSel"></select>
+      </div>
+    </div>
+    <div class="fgroup">
+      <span class="flabel" id="lblView">View</span>
+      <div class="seg" role="radiogroup" aria-labelledby="lblView" data-key="view">
+        <button role="radio" data-v="level">Level</button>
+        <button role="radio" data-v="change">Change vs present</button>
+      </div>
+    </div>
+    <div class="fgroup">
+      <label class="flabel" for="stateSel">Region</label>
+      <div class="select-wrap">
+        <select id="stateSel"><option value="">United States</option></select>
+      </div>
+    </div>
+  </section>
+
+  <main class="stage">
+    <div id="map" aria-label="Map of flood risk by ZIP code" role="region"></div>
+
+    <div class="legend glass" id="legend" aria-live="polite"></div>
+    <div class="maptip" id="maptip" role="tooltip" hidden></div>
+    <div class="loading" id="loading"><span class="spinner"></span><span>Loading data…</span></div>
+
+    <aside class="panel glass" id="panel" aria-label="Details">
+      <section class="view" id="viewOverview">
+        <div class="ctx">
+          <span class="ctx-region" id="ctxRegion">United States</span>
+          <span class="chip" id="ctxScenario">Present climate</span>
+        </div>
+        <div class="hero">
+          <div class="hero-label" id="heroLabel">Expected annual loss</div>
+          <div class="hero-value" id="heroValue">—</div>
+          <div class="hero-sub" id="heroSub"></div>
+        </div>
+        <div class="tiles" id="tiles"></div>
+
+        <figure class="card" id="cardScenario">
+          <figcaption>
+            <span class="card-title" id="scenTitle">Expected annual loss by scenario</span>
+            <button class="ghost tv" data-target="cardScenario" type="button">Table</button>
+          </figcaption>
+          <div class="chart" id="chartScenario" style="height:210px"></div>
+          <div class="tablev" hidden></div>
+        </figure>
+
+        <figure class="card" id="cardPeril">
+          <figcaption>
+            <span class="card-title">Share of loss by flood type</span>
+            <button class="ghost tv" data-target="cardPeril" type="button">Table</button>
+          </figcaption>
+          <div class="segbar" id="segbar" role="img"></div>
+          <div class="seglegend" id="seglegend"></div>
+          <p class="note" id="perilNote"></p>
+          <div class="tablev" hidden></div>
+        </figure>
+
+        <figure class="card" id="cardRank">
+          <figcaption>
+            <span class="card-title" id="rankTitle">Highest-risk ZIP codes</span>
+          </figcaption>
+          <table class="rank" id="rankTable"></table>
+        </figure>
+        <p class="foot">Values: full replacement cost of residential structures and contents, USD at the NSI August-2025 price level. Exposure held at the 2026 building stock for all horizons.</p>
+      </section>
+
+      <section class="view" id="viewZip" hidden>
+        <button class="back" id="backBtn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6l-6 6 6 6"/></svg> Overview
+        </button>
+        <div class="zip-head">
+          <div class="zip-code" id="zipCode">—</div>
+          <div class="zip-place" id="zipPlace"></div>
+        </div>
+        <div class="tiles" id="zipTiles"></div>
+        <figure class="card" id="cardEP">
+          <figcaption>
+            <span class="card-title" id="epTitle">Loss by return period</span>
+            <button class="ghost tv" data-target="cardEP" type="button">Table</button>
+          </figcaption>
+          <div class="chart" id="chartEP" style="height:250px"></div>
+          <div class="tablev" hidden></div>
+        </figure>
+        <figure class="card" id="cardZipScen">
+          <figcaption>
+            <span class="card-title" id="zipScenTitle">Expected annual loss by scenario</span>
+            <button class="ghost tv" data-target="cardZipScen" type="button">Table</button>
+          </figcaption>
+          <div class="chart" id="chartZipScen" style="height:200px"></div>
+          <div class="tablev" hidden></div>
+        </figure>
+        <div class="facts" id="zipFacts"></div>
+      </section>
+    </aside>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/pmtiles@3.2.1/dist/pmtiles.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

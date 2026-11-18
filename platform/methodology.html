@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Methodology · Flood Risk Atlas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23256abf'/%3E%3Cpath d='M5 19c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M5 24c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3' fill='none' stroke='white' stroke-opacity='.55' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="css/app.css" rel="stylesheet" />
+  <link href="css/doc.css" rel="stylesheet" />
+</head>
+<body class="docpage">
+  <header class="topbar">
+    <a class="brand" href="./">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" /><path d="M5 18.5c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3" /><path class="w2" d="M5 23.5c3.5 0 3.5-3 7-3s3.5 3 7 3 3.5-3 7-3" /></svg>
+      <span class="brand-text"><span class="brand-name">Flood Risk Atlas</span><span class="brand-sub">US residential · climate-adjusted</span></span>
+    </a>
+    <nav class="tabs" aria-label="Sections">
+      <a class="tab" href="./">Atlas</a>
+      <a class="tab is-active" href="methodology.html">Methodology</a>
+      <a class="tab" href="data.html">Data</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle dark mode">
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6z"/></svg>
+      </button>
+    </div>
+  </header>
+  <div class="doc-wrap">
+    <nav class="toc" id="toc" aria-label="Contents"></nav>
+    <article class="doc" id="doc"><p class="muted">Loading methodology…</p></article>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="js/doc.js"></script>
+  <script>
+    loadDoc("docs/methodology.md");
+  </script>
+</body>
+</html>
