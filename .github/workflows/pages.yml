@@ -1,0 +1,61 @@
+# Deploys the static platform (platform/) to GitHub Pages together with the data of a GitHub release:
+# platform-data.zip (meta, ZIP index, map bins, return-period curves) and zcta.pmtiles (ZIP polygons), both
+# written by scripts/15_package_release.py. Runs on pushes that change the site or its documents, and on demand
+# (step 15 starts it after publishing a release).
+name: Deploy platform
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "platform/**"
+      - "docs/methodology.md"
+      - "docs/data_dictionary.csv"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release whose data to deploy (empty: latest release)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Add release data
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/release" platform/docs platform/data/downloads
+          gh release download ${TAG:+"$TAG"} --pattern platform-data.zip --pattern zcta.pmtiles --dir "$RUNNER_TEMP/release"
+          unzip -q -o "$RUNNER_TEMP/release/platform-data.zip" -d platform/data
+          mv "$RUNNER_TEMP/release/zcta.pmtiles" platform/data/zcta.pmtiles
+          cp docs/methodology.md platform/docs/methodology.md
+          cp docs/data_dictionary.csv platform/data/downloads/data_dictionary.csv
+          du -sh platform platform/data
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: platform
+
+      - id: deployment
+        uses: actions/deploy-pages@v5
